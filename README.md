@@ -1,7 +1,7 @@
 # opencv-project-01-color-detection
 OpenCV 얼굴 인식 및 색상 인식 프로젝트
 # OpenCV Object Detection Project
-
+7.30까지 9분할
 Python과 OpenCV를 활용한 객체 인식 프로젝트입니다.
 
 ## Projects
