@@ -1,5 +1,6 @@
 import cv2
 cap = cv2.VideoCapture(0)
+cv2.namedWindow("Camera", cv2.WINDOW_NORMAL)
 
 while True:
     ret, frame = cap.read()
@@ -39,7 +40,7 @@ while True:
     2
     )
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-    lower_red = (0, 120, 70)
+    lower_red = (0, 150, 90)
     upper_red = (10,255, 255)
     lower_blue = (100, 150, 0)
     upper_blue= (140,255, 255)
@@ -55,11 +56,13 @@ while True:
         cv2.RETR_EXTERNAL,
         cv2.CHAIN_APPROX_SIMPLE
     )
-    for cnt in red_contours:
+    if red_contours:
+        cnt = max(red_contours, key=cv2.contourArea)
+
         x, y, w, h = cv2.boundingRect(cnt)
     
 
-        if w * h > 1000:
+        if w * h > 3000:
             red_center_x = x + w//2
             red_center_y = y + h//2
             error_x = screen_center_x - red_center_x
@@ -155,6 +158,7 @@ while True:
     if blue_pixels >5000:
         cv2.putText(frame,"BLUE",(50,90),cv2.FONT_HERSHEY_SIMPLEX
                     ,1,(255,0,0),2)
+    
     cv2.imshow("Camera", frame)
     cv2.imshow("Red Mask", mask)
 
