@@ -1,7 +1,7 @@
 import cv2
 
 # test.mp4 영상 불러오기
-cap = cv2.VideoCapture("test.mp4")
+cap = cv2.VideoCapture(0)
 
 # 영상을 보여줄 창 설정
 cv2.namedWindow("Camera", cv2.WINDOW_NORMAL)
