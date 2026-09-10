@@ -116,6 +116,75 @@ while True:
             # 화면 중심과 객체 중심의 Y 방향 차이
             error_y = screen_center_y - red_center_y
 
+
+            if error_x > 50 and error_y > 50:
+                cv2.putText(frame, "MOVE RIGHT + UP",
+                (50, 350),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                1,
+                (0,255,0),
+                2)
+
+            elif error_x < -50 and error_y > 50:
+                cv2.putText(frame, "MOVE LEFT + UP",
+                (50, 350),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                1,
+                (0,255,0),
+                2)
+
+            elif error_x < -50 and error_y < -50:
+                cv2.putText(frame, "MOVE LEFT + DOWN",
+                (50, 350),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                1,
+                (0,255,0),
+                2)
+            elif error_x < -50 and error_y < -50:
+                cv2.putText(frame, "MOVE LEFT + DOWN",
+                (50, 350),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                1,
+                (0,255,0),
+                2)
+            elif error_x > 50:
+                cv2.putText(frame, "MOVE RIGHT",
+                (50, 350),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                1,
+                (0,255,0),
+                2)
+            elif error_x < -50:
+                cv2.putText(frame, "MOVE LEFT",
+                (50, 350),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                1,
+                (0,255,0),
+                2)
+            elif error_y > 50:
+                cv2.putText(frame, "MOVE UP",
+                (50, 350),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                1,
+                (0,255,0),
+                2)
+            elif error_y < -50:
+                cv2.putText(frame, "MOVE DOWN",
+                (50, 350),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                1,
+                (0,255,0),
+                2)
+
+            else:
+                cv2.putText(frame, "CENTER",
+                (50, 350),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                1,
+                (0,255,0),
+                2)
+            
+
             # X 오차를 이용해서 객체가 어느 방향에 있는지 판단
             if error_x > 10:
                 print("LEFT")
@@ -143,7 +212,7 @@ while True:
             cv2.putText(
                 frame,
                 "ERROR X : " + str(error_x),
-                (50,350),
+                (50,250),
                 cv2.FONT_HERSHEY_SIMPLEX,
                 1,
                 (0,255,0),
@@ -154,7 +223,7 @@ while True:
             cv2.putText(
                 frame,
                 "ERROR Y : " + str(error_y),
-                (50,400),
+                (50,300),
                 cv2.FONT_HERSHEY_SIMPLEX,
                 1,
                 (0,255,0),
@@ -178,7 +247,7 @@ while True:
                 cv2.putText(
                     frame,
                     "X : LEFT",
-                    (50,150),
+                    (50,170),
                     cv2.FONT_HERSHEY_SIMPLEX,
                     1,
                     (0,255,0),
@@ -189,7 +258,7 @@ while True:
                 cv2.putText(
                     frame,
                     "X : CENTER",
-                    (50,150),
+                    (50,170),
                     cv2.FONT_HERSHEY_SIMPLEX,
                     1,
                     (0,255,0),
@@ -200,7 +269,7 @@ while True:
                 cv2.putText(
                     frame,
                     "X : RIGHT",
-                    (50,150),
+                    (50,170),
                     cv2.FONT_HERSHEY_SIMPLEX,
                     1,
                     (0,255,0),
@@ -215,7 +284,7 @@ while True:
                 cv2.putText(
                     frame,
                     "Y : UP",
-                    (50,250),
+                    (50,220),
                     cv2.FONT_HERSHEY_SIMPLEX,
                     1,
                     (0,255,0),
@@ -226,7 +295,7 @@ while True:
                 cv2.putText(
                     frame,
                     "Y : CENTER",
-                    (50,250),
+                    (50,220),
                     cv2.FONT_HERSHEY_SIMPLEX,
                     1,
                     (0,255,0),
@@ -237,7 +306,7 @@ while True:
                 cv2.putText(
                     frame,
                     "Y : BOTTOM",
-                    (50,250),
+                    (50,220),
                     cv2.FONT_HERSHEY_SIMPLEX,
                     1,
                     (0,255,0),
