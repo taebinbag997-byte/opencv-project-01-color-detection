@@ -118,72 +118,73 @@ while True:
 
 
             if error_x > 50 and error_y > 50:
-                cv2.putText(frame, "MOVE RIGHT + UP",
-                (50, 350),
-                cv2.FONT_HERSHEY_SIMPLEX,
-                1,
-                (0,255,0),
-                2)
-
+                move_direction = "RIGHT UP"
+                
             elif error_x < -50 and error_y > 50:
-                cv2.putText(frame, "MOVE LEFT + UP",
-                (50, 350),
-                cv2.FONT_HERSHEY_SIMPLEX,
-                1,
-                (0,255,0),
-                2)
-
+                move_direction = "LEFT UP"
+                
+            elif error_x > 50 and error_y < -50:
+                move_direction = "RIGHT DOWN"
+                
             elif error_x < -50 and error_y < -50:
-                cv2.putText(frame, "MOVE LEFT + DOWN",
-                (50, 350),
-                cv2.FONT_HERSHEY_SIMPLEX,
-                1,
-                (0,255,0),
-                2)
-            elif error_x < -50 and error_y < -50:
-                cv2.putText(frame, "MOVE LEFT + DOWN",
-                (50, 350),
-                cv2.FONT_HERSHEY_SIMPLEX,
-                1,
-                (0,255,0),
-                2)
+                move_direction = "LEFT DOWN"
+                
             elif error_x > 50:
-                cv2.putText(frame, "MOVE RIGHT",
-                (50, 350),
-                cv2.FONT_HERSHEY_SIMPLEX,
-                1,
-                (0,255,0),
-                2)
+                move_direction = "RIGHT"
+                
             elif error_x < -50:
-                cv2.putText(frame, "MOVE LEFT",
-                (50, 350),
-                cv2.FONT_HERSHEY_SIMPLEX,
-                1,
-                (0,255,0),
-                2)
+                move_direction = "LEFT"
+                
             elif error_y > 50:
-                cv2.putText(frame, "MOVE UP",
-                (50, 350),
-                cv2.FONT_HERSHEY_SIMPLEX,
-                1,
-                (0,255,0),
-                2)
+                move_direction = "UP"
+                
             elif error_y < -50:
-                cv2.putText(frame, "MOVE DOWN",
-                (50, 350),
-                cv2.FONT_HERSHEY_SIMPLEX,
-                1,
-                (0,255,0),
-                2)
-
+                move_direction = "DOWN"
+                
             else:
-                cv2.putText(frame, "CENTER",
+                move_direction = "CENTER"
+
+            cv2.putText(
+                frame,
+                move_direction,
                 (50, 350),
                 cv2.FONT_HERSHEY_SIMPLEX,
                 1,
                 (0,255,0),
-                2)
+                2
+            )
+
             
+            def drone_move(direction):
+
+                if direction == "RIGHT":
+                    print("DRONE → RIGHT")
+
+                elif direction == "LEFT":
+                    print("DRONE → LEFT")
+
+                elif direction == "UP":
+                    print("DRONE → UP")
+
+                elif direction == "DOWN":
+                    print("DRONE → DOWN")
+
+                elif direction == "RIGHT UP":
+                    print("DRONE → RIGHT + UP")
+
+                elif direction == "LEFT UP":
+                    print("DRONE → LEFT + UP")
+
+                elif direction == "RIGHT DOWN":
+                    print("DRONE → RIGHT + DOWN")
+
+                elif direction == "LEFT DOWN":
+                    print("DRONE → LEFT + DOWN")
+
+                elif direction == "CENTER":
+                    print("DRONE → STOP")
+
+            drone_move(move_direction)
 
             # X 오차를 이용해서 객체가 어느 방향에 있는지 판단
             if error_x > 10:
