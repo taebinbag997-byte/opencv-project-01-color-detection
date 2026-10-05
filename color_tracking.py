@@ -6,6 +6,42 @@ cap = cv2.VideoCapture(0)
 # 영상을 보여줄 창 설정
 cv2.namedWindow("Camera", cv2.WINDOW_NORMAL)
 
+def drone_move(direction):
+
+                if direction == "RIGHT":
+                    command = "RIGHT"
+
+                elif direction == "LEFT":
+                    command = "LEFT"
+
+                elif direction == "UP":
+                    command = "UP"
+
+                elif direction == "DOWN":
+                    command = "DOWN"
+
+                elif direction == "RIGHT UP":
+                    command = "RIGHT + UP"
+
+                elif direction == "LEFT UP":
+                    command = "LEFT + UP"
+
+                elif direction == "RIGHT DOWN":
+                    command = "RIGHT + DOWN"
+
+                elif direction == "LEFT DOWN":
+                    command = "LEFT + DOWN"
+
+                elif direction == "CENTER":
+                    command = "CENTER"
+
+                elif direction == "STOP":
+                    command = "STOP"
+
+                print("DRONE →", command)
+
+previous_direction = None
+
 while True:
 
     # 영상에서 한 프레임 읽기
@@ -90,6 +126,7 @@ while True:
         cv2.RETR_EXTERNAL,
         cv2.CHAIN_APPROX_SIMPLE
     )
+    move_direction = "STOP"
 
     # 빨간색 객체가 발견되었는지 확인
     if red_contours:
@@ -98,118 +135,69 @@ while True:
         cnt = max(red_contours, key=cv2.contourArea)
 
         # 선택한 객체의 사각형 정보
-        # x, y = 왼쪽 위 좌표
-        # w, h = 사각형의 너비와 높이
         x, y, w, h = cv2.boundingRect(cnt)
 
         # 너무 작은 영역은 실제 객체가 아니라고 판단
         if w * h > 3000:
 
             # 객체의 중심 좌표 계산
-            # x, y는 왼쪽 위이므로 너비와 높이의 절반을 더함
             red_center_x = x + w // 2
             red_center_y = y + h // 2
 
-            # 화면 중심과 객체 중심의 X 방향 차이
+            # 화면 중심과 객체 중심의 차이
             error_x = screen_center_x - red_center_x
-
-            # 화면 중심과 객체 중심의 Y 방향 차이
             error_y = screen_center_y - red_center_y
 
+            #카메라 앞에서 물체를 멀리/가까이 움직여보면서 값이 어떻게 변하는지 확인하기 위한 임시 기준값 
+            red_size = w * h
 
+            if red_size < 5000:
+                distance_direction = "FAR"
+            elif red_size > 15000:
+                distance_direction = "NEAR"
+            else:
+                distance_direction = "GOOD"
+            cv2.putText(
+                frame,
+                f"DISTANCE: {distance_direction}",
+                (20, 150),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                0.7,
+                (255, 255, 255),
+                2
+                )
+
+            # 이동 방향 판단
             if error_x > 50 and error_y > 50:
                 move_direction = "RIGHT UP"
-                
+
             elif error_x < -50 and error_y > 50:
                 move_direction = "LEFT UP"
-                
+
             elif error_x > 50 and error_y < -50:
                 move_direction = "RIGHT DOWN"
-                
+
             elif error_x < -50 and error_y < -50:
                 move_direction = "LEFT DOWN"
-                
-            elif error_x > 50:
+
+            elif error_x > 82:
                 move_direction = "RIGHT"
-                
-            elif error_x < -50:
+
+            elif error_x < -83:
                 move_direction = "LEFT"
-                
+
             elif error_y > 50:
                 move_direction = "UP"
-                
+
             elif error_y < -50:
                 move_direction = "DOWN"
-                
+
             else:
                 move_direction = "CENTER"
 
-            cv2.putText(
-                frame,
-                move_direction,
-                (50, 350),
-                cv2.FONT_HERSHEY_SIMPLEX,
-                1,
-                (0,255,0),
-                2
-            )
 
-            
-            def drone_move(direction):
-
-                if direction == "RIGHT":
-                    print("DRONE → RIGHT")
-
-                elif direction == "LEFT":
-                    print("DRONE → LEFT")
-
-                elif direction == "UP":
-                    print("DRONE → UP")
-
-                elif direction == "DOWN":
-                    print("DRONE → DOWN")
-
-                elif direction == "RIGHT UP":
-                    print("DRONE → RIGHT + UP")
-
-                elif direction == "LEFT UP":
-                    print("DRONE → LEFT + UP")
-
-                elif direction == "RIGHT DOWN":
-                    print("DRONE → RIGHT + DOWN")
-
-                elif direction == "LEFT DOWN":
-                    print("DRONE → LEFT + DOWN")
-
-                elif direction == "CENTER":
-                    print("DRONE → STOP")
-
-            drone_move(move_direction)
-
-            # X 오차를 이용해서 객체가 어느 방향에 있는지 판단
-            if error_x > 10:
-                print("LEFT")
-
-            elif error_x < -10:
-                print("RIGHT")
-
-            else:
-                print("CENTER")
-
-            # Y 오차를 이용해서 객체가 어느 방향에 있는지 판단
-            if error_y > 10:
-                print("UP")
-
-            elif error_y < -10:
-                print("DOWN")
-
-            else:
-                print("Y CENTER")
 
             # 화면에 X 오차 표시
-            # str()을 사용하는 이유:
-            # "ERROR X : "는 문자이고 error_x는 숫자이기 때문에
-            # 숫자를 문자로 바꿔서 하나의 문자열로 만들기 위해 사용
             cv2.putText(
                 frame,
                 "ERROR X : " + str(error_x),
@@ -231,7 +219,7 @@ while True:
                 2
             )
 
-            # 객체의 중심 위치에 초록색 점 표시
+            # 객체 중심 표시
             cv2.circle(
                 frame,
                 (red_center_x, red_center_y),
@@ -240,79 +228,58 @@ while True:
                 -1
             )
 
-            # --------------------------------
-            # 3×3 Grid에서 객체의 X 위치 판단
-            # --------------------------------
-
+            # X 위치 판단
             if red_center_x < left_line_x:
-                cv2.putText(
-                    frame,
-                    "X : LEFT",
-                    (50,170),
-                    cv2.FONT_HERSHEY_SIMPLEX,
-                    1,
-                    (0,255,0),
-                    2
-                )
-
-            elif left_line_x < red_center_x < right_line_x:
-                cv2.putText(
-                    frame,
-                    "X : CENTER",
-                    (50,170),
-                    cv2.FONT_HERSHEY_SIMPLEX,
-                    1,
-                    (0,255,0),
-                    2
-                )
-
+                x_position = "X : LEFT"
+            elif red_center_x < right_line_x:
+                x_position = "X : CENTER"
             else:
-                cv2.putText(
-                    frame,
-                    "X : RIGHT",
-                    (50,170),
-                    cv2.FONT_HERSHEY_SIMPLEX,
-                    1,
-                    (0,255,0),
-                    2
-                )
+                x_position = "X : RIGHT"
 
-            # --------------------------------
-            # 3×3 Grid에서 객체의 Y 위치 판단
-            # --------------------------------
+            cv2.putText(
+                frame,
+                x_position,
+                (50,170),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                1,
+                (0,255,0),
+                2
+            )
 
+            # Y 위치 판단
             if red_center_y < top_line_y:
-                cv2.putText(
-                    frame,
-                    "Y : UP",
-                    (50,220),
-                    cv2.FONT_HERSHEY_SIMPLEX,
-                    1,
-                    (0,255,0),
-                    2
-                )
-
-            elif top_line_y < red_center_y < bottom_line_y:
-                cv2.putText(
-                    frame,
-                    "Y : CENTER",
-                    (50,220),
-                    cv2.FONT_HERSHEY_SIMPLEX,
-                    1,
-                    (0,255,0),
-                    2
-                )
-
+                y_position = "Y : UP"
+            elif red_center_y < bottom_line_y:
+                y_position = "Y : CENTER"
             else:
-                cv2.putText(
-                    frame,
-                    "Y : BOTTOM",
-                    (50,220),
-                    cv2.FONT_HERSHEY_SIMPLEX,
-                    1,
-                    (0,255,0),
-                    2
-                )
+                y_position = "Y : BOTTOM"
+
+            cv2.putText(
+                frame,
+                y_position,
+                (50,220),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                1,
+                (0,255,0),
+                2
+            )
+
+    # 현재 이동 방향을 화면에 표시
+    cv2.putText(
+        frame,
+        move_direction,
+        (50,350),
+        cv2.FONT_HERSHEY_SIMPLEX,
+        1,
+        (0,255,0),
+        2
+    )
+
+    # 이동 방향이 바뀌었을 때만 드론 제어 함수 실행
+    if move_direction != previous_direction:
+        drone_move(move_direction)
+        previous_direction = move_direction
+
 
     # 파란색 객체들도 찾아서 중심점 표시
     for cnt in blue_contours:
