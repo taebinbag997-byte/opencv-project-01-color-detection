@@ -230,9 +230,9 @@ while True:
             cv2.putText(
                 frame,
                 f"DISTANCE: {distance_direction}",
-                (20, 150),
+                (20, 60),
                 cv2.FONT_HERSHEY_SIMPLEX,
-                0.7,
+                0.6,
                 (255, 255, 255),
                 2
                 )
@@ -270,9 +270,9 @@ while True:
             cv2.putText(
                 frame,
                 "ERROR X : " + str(error_x),
-                (50,250),
+                (20,150),
                 cv2.FONT_HERSHEY_SIMPLEX,
-                1,
+                0.6,
                 (0,255,0),
                 2
             )
@@ -281,9 +281,9 @@ while True:
             cv2.putText(
                 frame,
                 "ERROR Y : " + str(error_y),
-                (50,300),
+                (20,190),
                 cv2.FONT_HERSHEY_SIMPLEX,
-                1,
+                0.6,
                 (0,255,0),
                 2
             )
@@ -308,9 +308,9 @@ while True:
             cv2.putText(
                 frame,
                 x_position,
-                (50,170),
+                (20,90),
                 cv2.FONT_HERSHEY_SIMPLEX,
-                1,
+                0.6,
                 (0,255,0),
                 2
             )
@@ -326,9 +326,9 @@ while True:
             cv2.putText(
                 frame,
                 y_position,
-                (50,220),
+                (20,120),
                 cv2.FONT_HERSHEY_SIMPLEX,
-                1,
+                0.6,
                 (0,255,0),
                 2
             )
@@ -376,9 +376,9 @@ while True:
     cv2.putText(
         frame,
         move_direction,
-        (50,350),
+        (20,210),
         cv2.FONT_HERSHEY_SIMPLEX,
-        1,
+        0.6,
         (0,255,0),
         2
     )
@@ -391,9 +391,9 @@ while True:
         cv2.putText(
             frame,
             "RED",
-            (50,50),
+            (20,30),
             cv2.FONT_HERSHEY_SIMPLEX,
-            1,
+            0.6,
             (0,0,255),
             2
         )
