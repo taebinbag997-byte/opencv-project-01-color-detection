@@ -172,7 +172,7 @@ error_x, error_y의 움직임이 기존에 이해했던 좌표와 또 달라서 
 
 카메라 앞에서 빨간색 객체의 위치와 거리를 변경하며 이동 명령이 정상적으로 생성되는지 확인하였다.
 
-![최종 테스트 결과](final_tracking_test.png)
+![최종 테스트 결과](final_tracking_test.png.png)
 
 
 
